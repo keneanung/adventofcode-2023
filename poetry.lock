@@ -102,6 +102,17 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "prompt-toolkit"
+version = "3.0.41"
+description = "Library for building powerful interactive command lines in Python"
+category = "main"
+optional = false
+python-versions = ">=3.7.0"
+
+[package.dependencies]
+wcwidth = "*"
+
+[[package]]
 name = "pylint"
 version = "3.0.2"
 description = "python code static checker"
@@ -170,10 +181,18 @@ category = "dev"
 optional = false
 python-versions = ">=3.8"
 
+[[package]]
+name = "wcwidth"
+version = "0.2.12"
+description = "Measures the displayed width of unicode strings in a terminal"
+category = "main"
+optional = false
+python-versions = "*"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "59468671dc49824d4a89b966f440e4e41215baeb22e1f3f977986de987aabd44"
+content-hash = "5d9fc14a37fcf54611bc15d3ece197bb10904358c6b74036aa8f2350cd53201f"
 
 [metadata.files]
 astroid = []
@@ -186,8 +205,10 @@ mccabe = []
 packaging = []
 platformdirs = []
 pluggy = []
+prompt-toolkit = []
 pylint = []
 pytest = []
 tomli = []
 tomlkit = []
 typing-extensions = []
+wcwidth = []
