@@ -5,7 +5,7 @@ from adventofcode.day_three.common import ADJACENT_COORDINATE_DIFFERENCES, Numbe
 from adventofcode.util import read_input
 
 
-def find_adjacent_numbers(schematic: Schematic) -> Iterable[Number]:
+def __find_adjacent_numbers(schematic: Schematic) -> Iterable[Number]:
   adjacent_numbers = set()
   number_coordinates = schematic.numbers.keys()
   for symbol in schematic.symbols:
@@ -18,7 +18,7 @@ def find_adjacent_numbers(schematic: Schematic) -> Iterable[Number]:
 
 def solve_puzzle(inp: Iterable[str]) -> int:
   schematic = parse_input(inp)
-  adjacent_numbers = find_adjacent_numbers(schematic)
+  adjacent_numbers = __find_adjacent_numbers(schematic)
   numbers_values = [number.value for number in adjacent_numbers]
   return sum(numbers_values)
 
