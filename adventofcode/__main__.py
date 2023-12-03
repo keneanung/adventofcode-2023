@@ -5,6 +5,7 @@ from prompt_toolkit.validation import Validator, ValidationError
 
 from adventofcode.day_one import puzzle_one as day_one_puzzle_one, puzzle_two as day_one_puzzle_two
 from adventofcode.day_two import puzzle_one as day_two_puzzle_one, puzzle_two as day_two_puzzle_two
+from adventofcode.day_three import puzzle_one as day_three_puzzle_one, puzzle_two as day_three_puzzle_two
 
 
 PUZZLES = {
@@ -15,6 +16,10 @@ PUZZLES = {
     "2":{
         "1": day_two_puzzle_one.run_puzzle,
         "2": day_two_puzzle_two.run_puzzle,
+    },
+    "3":{
+        "1": day_three_puzzle_one.run_puzzle,
+        "2": day_three_puzzle_two.run_puzzle,
     }
 }
 
