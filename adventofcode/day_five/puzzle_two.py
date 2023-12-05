@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 from typing import Iterable, TypedDict
+from functools import cmp_to_key
 
 from adventofcode.util import read_input
 
@@ -15,43 +16,19 @@ class MapInfo():
     source_start: int
     destination_start: int
     map_range: int
-
-class SeedIterator():
-    ranges: list[tuple[int,int]]
-    __current_range: int
-    __current_value: int
     
-    def __init__(self):
-        self.__current_range = 0
-        self.__current_value = 0
-        self.ranges = []
-        
-    def add_range(self, start: int, length: int):
-        self.ranges.append((start, length))
+    @property
+    def destination_end(self):
+        return self.destination_start + self.map_range
     
-    def __iter__(self):
-        self.__current_range = 0
-        self.__current_value = self.ranges[self.__current_range][0] - 1
-        return self
-    
-    def __next__(self):
-        current_range = self.ranges[self.__current_range]
-        next_candidate = self.__current_value + 1
-        if next_candidate < current_range[0] + current_range[1]:
-            self.__current_value = next_candidate
-            return self.__current_value
-        next_range_candidate = self.__current_range + 1
-        if next_range_candidate < len(self.ranges):
-            print(next_range_candidate)
-            self.__current_range = next_range_candidate
-            self.__current_value = self.ranges[self.__current_range][0]
-            return self.__current_value
-        raise StopIteration
+    @property
+    def source_end(self):
+        return self.source_start + self.map_range
 
 class Almanac():
     
     def __init__(self):
-        self.seeds: SeedIterator = SeedIterator()
+        self.seeds: list[tuple[int,int]] = []
         self.soil: list[MapInfo] = []
         self.fertilizer: list[MapInfo] = []
         self.water: list[MapInfo] = []
@@ -84,7 +61,7 @@ def parse_input(inp: Iterable[str]) -> Almanac:
         match = re.match(SEED_LINE_REGEX, line)
         if match is not None:
             for seed_match in re.finditer(SEED_REGEX, match.group(1)):
-                result.seeds.add_range(start=int(seed_match.group(1)), length=int(seed_match.group(2)))
+                result.seeds.append((int(seed_match.group(1)), int(seed_match.group(2))))
             continue
         match = re.match(MAP_REGEX, line)
         if match is not None:
@@ -116,10 +93,30 @@ def get_mapped_thing(almanac: Almanac, map: str, step:int) -> int:
             return map_info.destination_start + diff
     return step
 
+def merge_layers(almanac: Almanac):
+    merged_almanac = almanac.soil
+    for map in ("fertilizer", "water", "light", "temperature", "humidity", "location"):
+        merged_almanac = merge_two(merged_almanac, almanac[map])
+        break
+    return merged_almanac
+
+def merge_two(merged: list[MapInfo], new_layer: list[MapInfo]):
+    for mapping_1 in merged:
+        for mapping_2 in new_layer:
+            if have_overlap(mapping_1, mapping_2):
+                print(mapping_1.destination_start, mapping_2.source_start)
+                
+def have_overlap(mapping_1: MapInfo, mapping_2:MapInfo):
+    return (
+        (mapping_1.destination_start < mapping_2.source_end) and (mapping_1.destination_end > mapping_2.source_end) or
+        (mapping_1.destination_end > mapping_2.source_start) and (mapping_1.destination_start < mapping_2.source_start)
+    )
+
 def solve_puzzle(inp: Iterable[str]) -> int:
     almanac = parse_input(inp)
-    locations = get_minimum_seed_location(almanac)
-    return locations
+    merged_almanac = merge_layers(almanac)
+    #locations = get_minimum_seed_location(almanac)
+    return 0
 
 def run_puzzle():
     lines = read_input(Path(__file__).parent / "input.txt")
