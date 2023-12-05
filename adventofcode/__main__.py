@@ -7,6 +7,7 @@ from adventofcode.day_one import puzzle_one as day_one_puzzle_one, puzzle_two as
 from adventofcode.day_two import puzzle_one as day_two_puzzle_one, puzzle_two as day_two_puzzle_two
 from adventofcode.day_three import puzzle_one as day_three_puzzle_one, puzzle_two as day_three_puzzle_two
 from adventofcode.day_four import puzzle_one as day_four_puzzle_one, puzzle_two as day_four_puzzle_two
+from adventofcode.day_five import puzzle_one as day_five_puzzle_one, puzzle_two as day_five_puzzle_two
 
 
 PUZZLES = {
@@ -25,6 +26,10 @@ PUZZLES = {
     "4":{
         "1": day_four_puzzle_one.run_puzzle,
         "2": day_four_puzzle_two.run_puzzle,
+    },
+    "5":{
+        "1": day_five_puzzle_one.run_puzzle,
+        "2": day_five_puzzle_two.run_puzzle,
     },
 }
 
