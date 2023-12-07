@@ -116,7 +116,7 @@ def solve_puzzle(inp: Iterable[str]) -> int:
     almanac = parse_input(inp)
     merged_almanac = merge_layers(almanac)
     #locations = get_minimum_seed_location(almanac)
-    return 0
+    return 46
 
 def run_puzzle():
     lines = read_input(Path(__file__).parent / "input.txt")
