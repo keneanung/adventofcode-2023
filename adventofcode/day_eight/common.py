@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from itertools import cycle
+from math import lcm
 import re
 from typing import Iterable, Callable
 
@@ -23,35 +24,27 @@ class Map():
     def add_node(self, name: str, left: str, right: str):
         self.__nodes[name] = Node(name=name, left=left, right=right)
         
-    def get_steps(self, path_nodes: Iterable[str], end_condition: Callable[[list[str]], bool]):
+    def get_steps(self, node_name: str, end_condition: Callable[[str], bool]):
         steps = 0
         for direction in cycle(self.__directions):
             if direction != "L" and direction != "R":
                     continue
             steps += 1
-            new_path_nodes: list[str] = []
-            for node_name in path_nodes:
-                node = self.__nodes[node_name]
-                if direction == "R":
-                    node_name = node.right
-                else:
-                    node_name  = node.left
-                new_path_nodes.append(node_name)
-            path_nodes = new_path_nodes
-            if steps % 1000000 == 0:
-                print(steps)
-            if end_condition(new_path_nodes):
+            node = self.__nodes[node_name]
+            if direction == "R":
+                node_name = node.right
+            else:
+                node_name  = node.left
+            if end_condition(node_name):
                 return steps
         raise Exception("Not reachable")
     
     def get_steps_one(self):
-        return self.get_steps(["AAA"], lambda lst: lst[0]=="ZZZ")
+        return self.get_steps("AAA", lambda name: name=="ZZZ")
     
     def get_steps_two(self):
-        starts = [node_name for node_name in self.__nodes.keys() if node_name.endswith("A")]
-        print(len(starts))
-        end_condition = lambda nodes: not any(not node_name.endswith("Z") for node_name in nodes)
-        return self.get_steps(starts, end_condition)
+        lengths = [self.get_steps(node_name, lambda node_name: node_name.endswith("Z")) for node_name in self.__nodes.keys() if node_name.endswith("A")]
+        return lcm(*lengths)
 
 def parse_input(inp: Iterable[str]) -> Map:
     result = Map()
